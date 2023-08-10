@@ -1,6 +1,6 @@
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+o<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_DisplayControl_sendinblue_Extensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_DisplayControl_sendinblue_Extensions">
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_DisplayControl_brevo_Extensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_DisplayControl_brevo_Extensions">
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
@@ -12,7 +12,7 @@
         <DataType>string</DataType>
       </ClaimType>
       <ClaimType Id="emailRequestBody">
-        <DisplayName>sendinblue request body</DisplayName>
+        <DisplayName>brevo request body</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
       <ClaimType Id="VerificationCode">
@@ -58,7 +58,7 @@
           <InputClaim ClaimTypeReferenceId="signature" TransformationClaimType="params.signature" />
         </InputClaims>
         <InputParameters>
-          <!-- TBD <InputParameter Id="templateId" DataType="int" Value="your-sendinblue-templateid"/> -->
+          <!-- TBD <InputParameter Id="templateId" DataType="int" Value="your-brevo-templateid"/> -->
           <InputParameter Id="templateId" DataType="int" Value="1" />
         </InputParameters>
         <OutputClaims>
@@ -118,7 +118,7 @@
           <LocalizedString ElementType="ClaimType" ElementId="emailVerificationCode" StringId="DisplayName">Verification Code</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="emailVerificationCode" StringId="UserHelpText">Verification code received in the email.</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="emailVerificationCode" StringId="AdminHelpText">Verification code received in the email.</LocalizedString>
-          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Eamil</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">Email</LocalizedString>
           <!-- Email validation error messages-->
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfSessionDoesNotExist">You have exceeded the maximum time allowed.</LocalizedString>
           <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMaxRetryAttempted">You have exceeded the number of retries allowed.</LocalizedString>
