@@ -1,12 +1,12 @@
 # Custom email verification with Sendinblue
 
-Custom email verification requires the use of a third-party email provider like [SendGrid](https://sendgrid.com), [Mailjet](https://Mailjet.com),  [SparkPost](https://sparkpost.com) or [Sendinblue](https://www.sendinblue.com/), a custom REST API, or any HTTP-based email provider (including your own). This article describes setting up a solution that uses Sendinblue.
+Custom email verification requires the use of a third-party email provider like [SendGrid](https://sendgrid.com), [Mailjet](https://Mailjet.com),  [SparkPost](https://sparkpost.com) or [Brevo](https://www.brevo.com/), a custom REST API, or any HTTP-based email provider (including your own). This article describes setting up a solution that uses Brevo (legacy Sendinblue).
 
-## Create a Sendinblue account
+## Create a Brevo account
 
-If you don't already have one, start by setting up a Sendinblue account [here](https://app.sendinblue.com/account/register).
+If you don't already have one, start by setting up a Sendinblue account [here](https://app.brevo.com/account/register).
 
-Be sure to complete the section in which you [get sendinblue API key](https://developers.sendinblue.com/docs#quick-start). Record the API key for use in a later step.
+Be sure to complete the section in which you [get brevo API key](https://developers.brevo.com/docs#quick-start). Record the API key for use in a later step.
 
 ## Create Azure AD B2C policy key
 
@@ -18,16 +18,16 @@ Next, store the Sendinblue API key in an Azure AD B2C policy key for your polici
 1. On the Overview page, select **Identity Experience Framework**.
 1. Select **Policy Keys** and then select **Add**.
 1. For **Options**, choose **Manual**.
-1. Enter a **Name** for the policy key. For example, `sendinblueAPIKey`. The prefix `B2C_1A_` is added automatically to the name of your key.
+1. Enter a **Name** for the policy key. For example, `brevoAPIKey`. The prefix `B2C_1A_` is added automatically to the name of your key.
 1. In **Secret**, enter your API key that you previously recorded.
 1. For **Key usage**, select **Signature**.
 1. Select **Create**.
 
-## Create Sendinblue template
+## Create Brevo template
 
-With a Sendinblue account created and Sendinblue API key stored in an Azure AD B2C policy key, create a Sendinblue [transactional email template](https://help.sendinblue.com/hc/en-us/articles/360000946299-Create-customize-transactional-email-templates).
+With a Brevo (legacy Sendinblue) account created and Brevo API key stored in an Azure AD B2C policy key, create a Brevo [transactional email template](https://help.brevo.com/hc/en-us/articles/360000946299-Create-customize-transactional-email-templates).
 
-1. On the Sendinblue site, open the [templates](https://my.sendinblue.com/camp/lists/template) page and select **New Template**.
+1. On the Brevo site, open the [templates](https://https://my.brevo.com/camp/lists/template) page and select **New Template**.
 1. Enter a unique template name like `Verification email` 
 1. Enter `Verify your e-mail address` for the subject line (you can customize that later)
 1. select **Next Step**.
@@ -156,13 +156,13 @@ These claims types are necessary to generate and verify the email address using 
 
 ## Add the claims transformation
 
-Next, you need a claims transformation to output a JSON string claim that will be the body of the request sent to Sendinblue.
+Next, you need a claims transformation to output a JSON string claim that will be the body of the request sent to Brevo.
 
 The JSON object's structure is defined by the IDs in dot notation of the InputParameters and the TransformationClaimTypes of the InputClaims. Numbers in the dot notation imply arrays. The values come from the InputClaims' values and the InputParameters' "Value" properties. 
 
 Add the following claims transformation to the `<ClaimsTransformations>` element within `<BuildingBlocks>`. Make the following updates to the claims transformation XML:
 
-* Update the `template_id` InputParameter value with the ID of the Sendinblue transactional template you created earlier in [Create Sendinblue template](#create-sendinblue-template).
+* Update the `template_id` InputParameter value with the ID of the Sendinblue transactional template you created earlier in [Create Brevo template](#create-brevo-template).
 * Update the value of the `params.subject` subject line input parameter with a subject line appropriate for your organization.
 
 ```xml
@@ -173,7 +173,7 @@ Add the following claims transformation to the `<ClaimsTransformations>` element
     <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="params.email" />
   </InputClaims>
   <InputParameters>
-    <!-- Update the template_id value with the ID of your Sendinblue template. -->
+    <!-- Update the template_id value with the ID of your Brevo template. -->
     <InputParameter Id="template_id" DataType="int" Value="1"/>
     <!-- Update with a subject line appropriate for your organization. -->
     <InputParameter Id="params.subject" DataType="string" Value="Contoso account email verification code"/>
@@ -285,7 +285,7 @@ Add the following technical profiles to the `<ClaimsProviders>` element.
 
 ## Add a REST API technical profile
 
-This REST API technical profile generates the email content (using the Sendinblue format).
+This REST API technical profile generates the email content (using the Brevo format).
 
 As with the OTP technical profiles, add the following technical profiles to the `<ClaimsProviders>` element.
 
@@ -294,16 +294,16 @@ As with the OTP technical profiles, add the following technical profiles to the 
   <DisplayName>RestfulProvider</DisplayName>
   <TechnicalProfiles>
     <TechnicalProfile Id="SendOtp">
-      <DisplayName>Use Sendinblue email API to send the code the the user</DisplayName>
+      <DisplayName>Use Brevo (legacy Sendinblue) email API to send the code the the user</DisplayName>
       <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
         <Metadata>
-        <Item Key="ServiceUrl">https://api.sendinblue.com/v3/smtp/email</Item>
+        <Item Key="ServiceUrl">https://api.brevo.com/v3/smtp/email</Item>
         <Item Key="AuthenticationType">ApiKeyHeader</Item>
         <Item Key="SendClaimsIn">Body</Item>
         <Item Key="ClaimUsedForRequestPayload">emailRequestBody</Item>
         </Metadata>
         <CryptographicKeys>
-            <Key Id="api-key" StorageReferenceId="B2C_1A_sendinblueAPIKey" />
+            <Key Id="api-key" StorageReferenceId="B2C_1A_brevoAPIKey" />
         </CryptographicKeys>
       <InputClaimsTransformations>
         <InputClaimsTransformation ReferenceId="GenerateEmailRequestBody" />
@@ -359,12 +359,12 @@ In the final step, add a reference to the DisplayControl you created. Replace yo
 
 ## [Optional] Localize your email
 
-To localize the email, you must send localized strings to Sendinblue, or your email provider. For example, you can localize the email subject, body, your code message, or signature of the email. To do so, you can use the `GetLocalizedStringsTransformation` claims transformation to copy localized strings into claim types. The `GenerateEmailRequestBody` claims transformation, which generates the JSON payload, uses input claims that contain the localized strings.
+To localize the email, you must send localized strings to Brevo, or your email provider. For example, you can localize the email subject, body, your code message, or signature of the email. To do so, you can use the `GetLocalizedStringsTransformation` claims transformation to copy localized strings into claim types. The `GenerateEmailRequestBody` claims transformation, which generates the JSON payload, uses input claims that contain the localized strings.
 
 1. In your policy, define the following string claims: subject, message, codeIntro, and signature.
 1. Define a `GetLocalizedStringsTransformation` claims transformation to substitute localized string values into the claims from step 1.
 1. Change the `GenerateEmailRequestBody` claims transformation to use input claims with the following XML snippet.
-1. Update your Sendinblue template to use dynamic parameters in place of all the strings that will be localized by Azure AD B2C.
+1. Update your Brevo template to use dynamic parameters in place of all the strings that will be localized by Azure AD B2C.
 
     ```xml
     <ClaimsTransformation Id="GetLocalizedStringsForEmail" TransformationMethod="GetLocalizedStringsTransformation">
@@ -489,4 +489,4 @@ After you add the localized strings, remove the OTP validation error messages me
 
 ## Next steps
 
-You can find an example of a custom email verification policy on under [Sendinblue folder](policy/Sendinblue).
+You can find an example of a custom email verification policy on under [Brevo folder](policy/Brevo).
