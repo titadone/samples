@@ -232,16 +232,16 @@
       <DisplayName>RestfulProvider</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="SendOtp">
-          <DisplayName>Use sendinblue's email API to send the code the the user</DisplayName>
+          <DisplayName>Use brevo 's (legacy sendinblue's) email API to send the code the the user</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://api.sendinblue.com/v3/smtp/email</Item>
+            <Item Key="ServiceUrl">https://api.brevo.com/v3/smtp/email</Item>
             <Item Key="AuthenticationType">ApiKeyHeader</Item>
             <Item Key="SendClaimsIn">Body</Item>
             <Item Key="ClaimUsedForRequestPayload">emailRequestBody</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="api-key" StorageReferenceId="B2C_1A_sendinblueAPIKey" />
+            <Key Id="api-key" StorageReferenceId="B2C_1A_brevoAPIKey" />
           </CryptographicKeys>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateEmailRequestBody" />
